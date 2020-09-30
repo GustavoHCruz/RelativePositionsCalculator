@@ -1219,443 +1219,66 @@ void gotoxy(int x, int y)
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
 }
 
-int binary_menu(int x)
+int dynamic_menu(char *title, int amount, int selectable, ...)
 {
-    int a, b, current_line, previous_line, option, bot_limit, top_limit;
+    if (selectable > amount)
+        return -1;
 
-    current_line = x;
-    previous_line = x;
-    b = x;
-    bot_limit = x;
-    top_limit = x + 1;
-    option = 0;
+    int x = 1, ch, current_line = x, previous_line = x, option = 0, bot_limit = x, top_limit = selectable, bigger = 0;
 
-    printf("   Yes\n   No\n");
-    do
-    {
-        gotoxy(0, current_line);
-        printf("-->");
-        gotoxy(6, current_line);
-        printf("<--");
-        gotoxy(0, 5);
-
-        a = _getch();
-
-        if (a == 0)
-            a = _getch();
-
-        if (a == 80 && b < top_limit)
-        {
-            previous_line = current_line;
-            current_line++;
-            b++;
-        }
-        else if (a == 72 && b > bot_limit)
-        {
-            previous_line = current_line;
-            current_line--;
-            b--;
-        }
-        else if (a == 13)
-        {
-            option = b + 1 - x;
-        }
-        if (current_line != previous_line)
-        {
-            gotoxy(0, previous_line);
-            printf("   ");
-            gotoxy(6, previous_line);
-            printf("   ");
-            previous_line = current_line;
-        }
-    } while (option == 0);
-
-    return option;
-}
-
-int menu_points(int x)
-{
-    int a, b, current_line, previous_line, option, bot_limit, top_limit;
-    option = 0;
-
-    if (x == 0)
-    {
-        bot_limit = 1;
-        top_limit = 2;
-    }
-    else if (x == 1)
-    {
-        bot_limit = 1;
-        top_limit = 5;
-    }
-    else
-    {
-        bot_limit = 1;
-        top_limit = 6;
-    }
-
-    option = 0;
-    current_line = 1;
-    previous_line = 1;
-    b = 1;
     system("cls");
-    printf("==================POINTS==================\n   Back\n   Add Point\n   Print all Points\n   Delete Point\n   Delete all Points\n   Calculate distance between two Points\n");
+    printf("%s\n", title);
+
+    va_list list;
+
+    int aux;
+    va_start(list, amount);
+    for (int i = 0; i < amount; i++)
+    {
+        aux = printf("   %s\n", va_arg(list, int));
+        if (aux > bigger)
+            bigger = aux;
+    }
+    va_end(list);
+    bigger--;
+
     do
     {
         gotoxy(0, current_line);
         printf("-->");
-        gotoxy(40, current_line);
+        gotoxy(bigger, current_line);
         printf("<--");
-        gotoxy(0, 7);
+        gotoxy(0, x + amount + 1);
 
-        a = _getch();
+        ch = _getch();
 
-        if (a == 0)
-            a = _getch();
+        if (ch == 0)
+            ch = _getch();
 
-        if (a == 80 && b < top_limit)
+        if (ch == 80 && current_line < top_limit)
         {
             previous_line = current_line;
             current_line++;
-            b++;
         }
-        else if (a == 72 && b > bot_limit)
+        else if (ch == 72 && current_line > bot_limit)
         {
             previous_line = current_line;
             current_line--;
-            b--;
         }
-        else if (a == 13)
+        else if (ch == 13)
         {
-            option = b;
+            option = current_line + 1 - x;
         }
         if (current_line != previous_line)
         {
             gotoxy(0, previous_line);
             printf("   ");
-            gotoxy(40, previous_line);
+            gotoxy(bigger, previous_line);
             printf("   ");
-            previous_line = current_line;
         }
     } while (option == 0);
 
-    return option - 1;
-}
-
-int menu_vector(int x)
-{
-    int a, b, current_line, previous_line, option, bot_limit, top_limit;
-    option = 0;
-
-    if (x == 0)
-    {
-        bot_limit = 1;
-        top_limit = 2;
-    }
-    else if (x == 1)
-    {
-        bot_limit = 1;
-        top_limit = 5;
-    }
-    else
-    {
-        bot_limit = 1;
-        top_limit = 6;
-    }
-
-    option = 0;
-    current_line = 1;
-    previous_line = 1;
-    b = 1;
     system("cls");
-    printf("==================VECTORS==================\n   Back\n   Add Vector\n   Print all Vectors\n   Delete Vector\n   Delete all Vectors\n   Calculate linearity between Vectors\n");
-    do
-    {
-        gotoxy(0, current_line);
-        printf("-->");
-        gotoxy(38, current_line);
-        printf("<--");
-        gotoxy(0, 7);
-
-        a = _getch();
-
-        if (a == 0)
-            a = _getch();
-
-        if (a == 80 && b < top_limit)
-        {
-            previous_line = current_line;
-            current_line++;
-            b++;
-        }
-        else if (a == 72 && b > bot_limit)
-        {
-            previous_line = current_line;
-            current_line--;
-            b--;
-        }
-        else if (a == 13)
-        {
-            option = b;
-        }
-        if (current_line != previous_line)
-        {
-            gotoxy(0, previous_line);
-            printf("   ");
-            gotoxy(38, previous_line);
-            printf("   ");
-            previous_line = current_line;
-        }
-    } while (option == 0);
-
-    return option - 1;
-}
-
-int menu_lines(int x)
-{
-    int a, b, current_line, previous_line, option, bot_limit, top_limit;
-    option = 0;
-
-    if (x == 0)
-    {
-        bot_limit = 1;
-        top_limit = 2;
-    }
-    else if (x == 1)
-    {
-        bot_limit = 1;
-        top_limit = 5;
-    }
-    else
-    {
-        bot_limit = 1;
-        top_limit = 7;
-    }
-
-    option = 0;
-    current_line = 1;
-    previous_line = 1;
-    b = 1;
-    system("cls");
-    printf("==================LINES==================\n   Back\n   Add Line\n   Print all Lines\n   Delete Line\n   Delete all Lines\n   Calculate distance between two Lines\n   Calculate relative position between two Lines\n");
-    do
-    {
-        gotoxy(0, current_line);
-        printf("-->");
-        gotoxy(48, current_line);
-        printf("<--");
-        gotoxy(0, 9);
-
-        a = _getch();
-
-        if (a == 0)
-            a = _getch();
-
-        if (a == 80 && b < top_limit)
-        {
-            previous_line = current_line;
-            current_line++;
-            b++;
-        }
-        else if (a == 72 && b > bot_limit)
-        {
-            previous_line = current_line;
-            current_line--;
-            b--;
-        }
-        else if (a == 13)
-        {
-            option = b;
-        }
-        if (current_line != previous_line)
-        {
-            gotoxy(0, previous_line);
-            printf("   ");
-            gotoxy(48, previous_line);
-            printf("   ");
-            previous_line = current_line;
-        }
-    } while (option == 0);
-
-    return option - 1;
-}
-
-int menu_planes(int x)
-{
-    int a, b, current_line, previous_line, option, bot_limit, top_limit;
-    option = 0;
-
-    if (x == 0)
-    {
-        bot_limit = 1;
-        top_limit = 2;
-    }
-    else if (x == 1)
-    {
-        bot_limit = 1;
-        top_limit = 5;
-    }
-    else
-    {
-        bot_limit = 1;
-        top_limit = 7;
-    }
-
-    option = 0;
-    current_line = 1;
-    previous_line = 1;
-    b = 1;
-    system("cls");
-    printf("==================PLANES==================\n   Back\n   Add Plane\n   Print all Planes\n   Delete Plane\n   Delete all Planes\n   Calculate distance between two Planes\n   Calculate relative position between two Planes\n");
-    do
-    {
-        gotoxy(0, current_line);
-        printf("-->");
-        gotoxy(49, current_line);
-        printf("<--");
-        gotoxy(0, 9);
-
-        a = _getch();
-
-        if (a == 0)
-            a = _getch();
-
-        if (a == 80 && b < top_limit)
-        {
-            previous_line = current_line;
-            current_line++;
-            b++;
-        }
-        else if (a == 72 && b > bot_limit)
-        {
-            previous_line = current_line;
-            current_line--;
-            b--;
-        }
-        else if (a == 13)
-        {
-            option = b;
-        }
-
-        if (current_line != previous_line)
-        {
-            gotoxy(0, previous_line);
-            printf("   ");
-            gotoxy(49, previous_line);
-            printf("   ");
-            previous_line = current_line;
-        }
-    } while (option == 0);
-
-    return option - 1;
-}
-
-int menu_geral(int point, int vector, int line, int plane)
-{
-    int a, b, current_line, previous_line, option, answer, top_limit, bot_limit, amount_menu, amount_option;
-
-    amount_menu = 4;
-    amount_option = 3;
-    bot_limit = 1;
-    top_limit = amount_option + amount_menu + bot_limit;
-
-    do
-    {
-        option = 0;
-        current_line = 1;
-        previous_line = 1;
-        b = 1;
-        system("cls");
-        printf("==================OPTIONS MENU==================\n   Points operations\n   Vectors operations\n   Lines operations\n   Planes operations\n   Print all\n   Delete all\n   Save\n   Exit\n");
-        do
-        {
-            gotoxy(0, current_line);
-            printf("-->");
-            gotoxy(21, current_line);
-            printf("<--");
-            gotoxy(0, top_limit + 1);
-
-            a = _getch();
-
-            if (a == 0)
-                a = _getch();
-
-            if (a == 80 && b < top_limit)
-            {
-                previous_line = current_line;
-                current_line++;
-                b++;
-            }
-            else if (a == 72 && b > bot_limit)
-            {
-                previous_line = current_line;
-                current_line--;
-                b--;
-            }
-            else if (a == 13)
-            {
-                option = b;
-            }
-
-            if (current_line != previous_line)
-            {
-                gotoxy(0, previous_line);
-                printf("   ");
-                gotoxy(21, previous_line);
-                printf("   ");
-                previous_line = current_line;
-            }
-        } while (option == 0);
-
-        if (option == 1)
-        {
-            answer = menu_points(point);
-
-            if (answer != 0)
-            {
-                option = answer - 1 + 10;
-                break;
-            }
-        }
-        if (option == 2)
-        {
-            answer = menu_vector(vector);
-
-            if (answer != 0)
-            {
-                option = answer - 1 + 20;
-                break;
-            }
-        }
-        if (option == 3)
-        {
-            answer = menu_lines(line);
-
-            if (answer != 0)
-            {
-                option = answer - 1 + 30;
-                break;
-            }
-        }
-        if (option == 4)
-        {
-            answer = menu_planes(plane);
-
-            if (answer != 0)
-            {
-                option = answer - 1 + 40;
-                break;
-            }
-        }
-
-        if (option > amount_menu)
-        {
-            option = option - amount_menu;
-            break;
-        }
-
-    } while (option < amount_menu + 1);
-
     return option;
 }
 //===============================================Menus
